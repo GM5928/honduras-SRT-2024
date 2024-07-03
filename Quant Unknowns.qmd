@@ -1,0 +1,49 @@
+---
+title: "Quant Unknowns"
+format: html
+---
+
+```{r}
+library(tidyverse)
+library(lubridate)
+library(readxl)
+library(googlesheets4)
+library(broom)
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+library(readr)
+RStudio_GitHub_Merged_Data_QUANT_A_B_Unknowns <- read_csv("RStudio_GitHub Merged Data (QUANT) - A+B Unknowns.csv")
+# View(RStudio_GitHub_Merged_Data_QUANT_A_B_Unknowns)
+```
+
+```{r}
+#| label: gender
+RStudio_GitHub_Merged_Data_QUANT_A_B_Unknowns |> ggplot(
+  aes(x = gender, fill = gender)
+) +
+  geom_bar() +
+  labs(title = "Number of Children Accounted For",
+       subtitle = "Based on Respondents to Survey",
+       x = "Gender",
+       y = "Number of Children")
+
+slices <- c(408, 4, 45, 7)
+
+lbls <- c("All", "None", "Some", "Unsure")
+pct <- round(slices/sum(slices)*100)
+lbls <- paste(lbls, pct)
+# add percents to labels
+lbls <- paste(lbls,"%",sep="") # ad % to labels
+pie(slices,labels = lbls, col=rainbow(length(lbls)),
+   main="Self-Reported Vaccine Status of Children")
+```
+
+```{r}
+RStudio_GitHub_Merged_Data_QUANT_A_B_Unknowns |>
+  count(how_many_vax)
+```
+
