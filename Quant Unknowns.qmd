@@ -63,3 +63,45 @@ print(mean_age)
 
 ```
 
+```{r}
+slices <- c(214, 24, 6)
+
+lbls <- c("Yes", "No", "Unsure")
+pct <- round(slices/sum(slices)*100)
+lbls <- paste(lbls, pct)
+# add percents to labels
+lbls <- paste(lbls,"%",sep="") # ad % to labels
+pie(slices,labels = lbls, col=cm.colors(length(lbls)),
+   main="Question 1 Responses- Other")
+
+slices <- c(154, 26, 5)
+
+lbls <- c("Yes", "No", "Unsure")
+pct <- round(slices/sum(slices)*100)
+lbls <- paste(lbls, pct)
+# add percents to labels
+lbls <- paste(lbls,"%",sep="") # ad % to labels
+pie(slices,labels = lbls, col=topo.colors(length(lbls)),
+   main="Question 1 Responses- La Colonia")
+
+slices <- c(175, 1, 68)
+
+lbls <- c("Yes", "No", "Unsure")
+pct <- round(slices/sum(slices)*100)
+lbls <- paste(lbls, pct)
+# add percents to labels
+lbls <- paste(lbls,"%",sep="") # ad % to labels
+pie(slices,labels = lbls, col=terrain.colors(length(lbls)),
+   main="Question 2 Responses- Other")
+
+slices <- c(144, 5, 36)
+
+lbls <- c("Yes", "No", "Unsure")
+pct <- round(slices/sum(slices)*100)
+lbls <- paste(lbls, pct)
+# add percents to labels
+lbls <- paste(lbls,"%",sep="") # ad % to labels
+pie(slices,labels = lbls, col=heat.colors(length(lbls)),
+   main="Question 2 Responses- La Colonia")
+```
+
