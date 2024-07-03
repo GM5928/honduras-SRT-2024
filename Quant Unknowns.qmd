@@ -43,7 +43,23 @@ pie(slices,labels = lbls, col=rainbow(length(lbls)),
 ```
 
 ```{r}
+#| label: count_vaccine_self_report
 RStudio_GitHub_Merged_Data_QUANT_A_B_Unknowns |>
   count(how_many_vax)
+```
+
+```{r}
+#| label: mean_ages_children
+library(dplyr)
+# Assuming age needs conversion
+RStudio_GitHub_Merged_Data_QUANT_A_B_Unknowns <- RStudio_GitHub_Merged_Data_QUANT_A_B_Unknowns |>
+  mutate(age = as.numeric(as.character(age)))
+
+# Calculate mean of age, ignoring NA values
+mean_age <- RStudio_GitHub_Merged_Data_QUANT_A_B_Unknowns |>
+  summarise(mean_age = mean(age, na.rm = TRUE))
+
+print(mean_age)
+
 ```
 
