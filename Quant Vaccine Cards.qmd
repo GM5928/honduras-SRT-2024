@@ -1,0 +1,27 @@
+---
+title: "honduras SRT 2024"
+---
+
+```{r}
+library(readr)
+RStudio_GitHub_Merged_Data_QUANT_A_B_Vax_Cards <- read_csv("RStudio_GitHub Merged Data (QUANT) - A+B Vax Cards.csv")
+#View(RStudio_GitHub_Merged_Data_QUANT_A_B_Vax_Cards)
+```
+
+```{r}
+vaccine_data <- RStudio_GitHub_Merged_Data_QUANT_A_B_Vax_Cards
+```
+
+```{r}
+has_vaccines <- function(row) {
+  any(!is.na(row))
+}
+
+check_vaccine_present <- function(has_vaccines) {
+  ifelse(!is.na(has_vaccines), "YES", "NO")
+}
+
+vaccine_data$hep_b_present <- check_vaccine_present(vaccine_data$hep_b)
+
+#view(vaccine_data)
+```
