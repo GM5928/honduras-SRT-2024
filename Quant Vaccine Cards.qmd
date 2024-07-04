@@ -67,21 +67,48 @@ vaccine_data$vitamin_a4_present <- check_vaccine_present(vaccine_data$vitamin_a4
 ```
 
 ```{r}
+#| label: status_per_vaccine
 vaccine_summary <- tibble(
   survey_date = vaccine_data$date,
   group_ID = vaccine_data$group,
   child_gender = vaccine_data$gender,
   child_dob = vaccine_data$dob,
   hep_b_status = ifelse(!is.na(vaccine_data$hep_b_present), "YES", "NO"),
-  bcg_status = ifelse(!is.na(vaccine_data$bcg_present), "YES", "NO"),
-  polio_vip1_status = ifelse(!is.na(vaccine_data$polio_vip1_present), "YES", "NO"),
-  polio_vip2_status = ifelse(!is.na(vaccine_data$polio_vip2_present), "YES", "NO"),
-  polio_vop1_status = ifelse(!is.na(vaccine_data$polio_vop1_present), "YES", "NO"),
-  polio_vop2_status = ifelse(!is.na(vaccine_data$polio_vop2_present), "YES", "NO"),
-  polio_vop3_status = ifelse(!is.na(vaccine_data$polio_vop3_present), "YES", "NO"),
-  polio_refuerzo_status = ifelse(!is.na(vaccine_data$polio_refuerzo_present), "YES", "NO"),
-  penta1_status = ifelse(!is.na(vaccine_data$penta1_present), "YES", "NO")
+  bcg_status = ifelse(!is.na(vaccine_data$bcg), "YES", "NO"),
+  polio_vip1_status = ifelse(!is.na(vaccine_data$polio_vip1), "YES", "NO"),
+  polio_vip2_status = ifelse(!is.na(vaccine_data$polio_vip2), "YES", "NO"),
+  polio_vop1_status = ifelse(!is.na(vaccine_data$polio_vop1), "YES", "NO"),
+  polio_vop2_status = ifelse(!is.na(vaccine_data$polio_vop2), "YES", "NO"),
+  polio_vop3_status = ifelse(!is.na(vaccine_data$polio_vop3), "YES", "NO"),
+  polio_refuerzo_status = ifelse(!is.na(vaccine_data$polio_refuerzo), "YES", "NO"),
+  penta1_status = ifelse(!is.na(vaccine_data$penta1), "YES", "NO"),
+  penta2_status = ifelse(!is.na(vaccine_data$penta2), "YES", "NO"),
+  penta3_status = ifelse(!is.na(vaccine_data$penta3), "YES", "NO"),
+  neumo1_status = ifelse(!is.na(vaccine_data$neumo1), "YES", "NO"),
+  neumo2_status = ifelse(!is.na(vaccine_data$neumo2), "YES", "NO"),
+  neumo3_status = ifelse(!is.na(vaccine_data$neumo3), "YES", "NO"),
+  rota1_status = ifelse(!is.na(vaccine_data$rota1), "YES", "NO"),
+  rota2_status = ifelse(!is.na(vaccine_data$rota2), "YES", "NO"),
+  rota_adicional_status = ifelse(!is.na(vaccine_data$rota_adicional), "YES", "NO"),
+  varicella_status = ifelse(!is.na(vaccine_data$varicella), "YES", "NO"),
+  hep_a_status = ifelse(!is.na(vaccine_data$hep_a), "YES", "NO"),
+  dpt1_status = ifelse(!is.na(vaccine_data$dpt1), "YES", "NO"),
+  dpt2_status = ifelse(!is.na(vaccine_data$dpt2), "YES", "NO"),
+  hep_b1_status = ifelse(!is.na(vaccine_data$hep_b1), "YES", "NO"),
+  hep_b2_status = ifelse(!is.na(vaccine_data$hep_b2), "YES", "NO"),
+  vph_1_status = ifelse(!is.na(vaccine_data$vph_1), "YES", "NO"),
+  tetanus_dip_status = ifelse(!is.na(vaccine_data$tetanus_dip), "YES", "NO"),
+  influenza_status = ifelse(!is.na(vaccine_data$influenza), "YES", "NO"),
+  vitamin_a1_status = ifelse(!is.na(vaccine_data$vitamin_a1), "YES", "NO"),
+  vitamin_a2_status = ifelse(!is.na(vaccine_data$vitamin_a2), "YES", "NO"),
+  vitamin_a3_status = ifelse(!is.na(vaccine_data$vitamin_a3), "YES", "NO"),
+  vitamin_a4_status = ifelse(!is.na(vaccine_data$vitamin_a4), "YES", "NO"))
+```
 
-
-)
+```{r}
+#| label: vaccine_summary
+vaccine_summary <- vaccine_summary |>
+  rowwise() |>
+  mutate(yes_count = sum(c_across(hep_b_status:tetanus_dip_status) == "YES"))
+print(vaccine_summary)
 ```
