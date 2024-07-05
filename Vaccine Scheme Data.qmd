@@ -19,16 +19,16 @@ You can add options to executable code like this
 library(readr)
 Consolidated_QUANT_Vax_Cards_no_refuerzo_flu_vitA_A_B_Vax_Cards_MINUS_Refuerzos_HepBs_Varicella <- read_csv("Consolidated QUANT Vax Cards (no refuerzo, flu, vitA) - A+B Vax Cards MINUS Refuerzos, HepBs, Varicella.csv", 
     col_types = cols(date = col_date(format = "%d-%m-%y")))
-#View(Consolidated_QUANT_Vax_Cards_no_refuerzo_flu_vitA_A_B_Vax_Cards_MINUS_Refuerzos_HepBs_Varicella)
+View(Consolidated_QUANT_Vax_Cards_no_refuerzo_flu_vitA_A_B_Vax_Cards_MINUS_Refuerzos_HepBs_Varicella)
 ```
 
 ```{r}
 #| label: number_of_vaccines_received
 vaccine_schedule <- Consolidated_QUANT_Vax_Cards_no_refuerzo_flu_vitA_A_B_Vax_Cards_MINUS_Refuerzos_HepBs_Varicella
 
-  vaccine_final <- tibble(
+vaccine_final <- tibble(
   survey_date = vaccine_schedule$date,
-  group_ID = vaccine_schedule$group,
+  group = vaccine_schedule$group,
   child_gender = vaccine_schedule$gender,
   child_dob = vaccine_schedule$dob,
   hep_b_status = ifelse(!is.na(vaccine_schedule$hep_b), "YES", "NO"),
@@ -46,16 +46,24 @@ vaccine_schedule <- Consolidated_QUANT_Vax_Cards_no_refuerzo_flu_vitA_A_B_Vax_Ca
   neumo3_status = ifelse(!is.na(vaccine_schedule$neumo3), "YES", "NO"),
   rota1_status = ifelse(!is.na(vaccine_schedule$rota1), "YES", "NO"),
   rota2_status = ifelse(!is.na(vaccine_schedule$rota2), "YES", "NO"),
+  srp1_status = ifelse(!is.na(vaccine_schedule$srp1), "YES", "NO"),
+  srp2_status = ifelse(!is.na(vaccine_schedule$srp2), "YES", "NO"),
   hep_a_status = ifelse(!is.na(vaccine_schedule$hep_a), "YES", "NO"),
   dpt1_status = ifelse(!is.na(vaccine_schedule$dpt1), "YES", "NO"),
   dpt2_status = ifelse(!is.na(vaccine_schedule$dpt2), "YES", "NO"),
   vph_1_status = ifelse(!is.na(vaccine_schedule$vph_1), "YES", "NO"),
   tetanus_dip_status = ifelse(!is.na(vaccine_schedule$tetanus_dip), "YES", "NO"))
-```
 
-```{r}
 vaccine_final <- vaccine_final |>
   rowwise() |>
   mutate(yes_count = sum(c_across(hep_b_status:tetanus_dip_status) == "YES"))
 print(vaccine_final)
+
+vaccine_final <- vaccine_final |>
+  rename(dob = child_dob)
+
+actual_vax_score <- vaccine_final |>
+  select(group, dob, yes_count) |>
+  as_tibble() |>
+  count(yes_count)
 ```

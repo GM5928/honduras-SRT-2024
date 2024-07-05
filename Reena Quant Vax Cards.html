@@ -115,12 +115,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>QUANT_vax_cards <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"RStudio_GitHub Merged Data (QUANT) - A+B Vax Cards.csv"</span>, </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">col_types =</span> <span class="fu">cols</span>(<span class="at">date =</span> <span class="fu">col_date</span>(<span class="at">format =</span> <span class="st">"%d-%m-%y"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>Consolidated_QUANT_Vax_Cards <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Consolidated QUANT Vax Cards (no refuerzos, flu, vitA, varicella) - A+B Vax Cards MINUS Refuerzos, HepBs, Varicella.csv"</span>, </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">col_types =</span> <span class="fu">cols</span>(<span class="at">date =</span> <span class="fu">col_date</span>(<span class="at">format =</span> <span class="st">"%d-%m-%y"</span>), </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">dob =</span> <span class="fu">col_date</span>(<span class="at">format =</span> <span class="st">"%d-%m-%Y"</span>)))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#View(Consolidated_QUANT_Vax_Cards)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># frequency table</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>QUANT_vax_cards <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>Consolidated_QUANT_Vax_Cards <span class="sc">|&gt;</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(gender) <span class="sc">|&gt;</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prop =</span> n<span class="sc">/</span><span class="fu">sum</span>(n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -132,7 +134,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 3 &lt;NA&gt;      16 0.0593</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># bar chart</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>QUANT_vax_cards <span class="sc">|&gt;</span> <span class="fu">ggplot</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>Consolidated_QUANT_Vax_Cards <span class="sc">|&gt;</span> <span class="fu">ggplot</span>(</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> gender, <span class="at">fill =</span> gender)</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
@@ -152,124 +154,81 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>QUANT_vax_cards <span class="ot">&lt;-</span> QUANT_vax_cards <span class="sc">|&gt;</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dob_date_format =</span> <span class="fu">as.Date</span>(dob, <span class="st">"%d-%m-%Y"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">day =</span> <span class="fu">day</span>(dob_date_format),</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">month =</span> <span class="fu">month</span>(dob_date_format),</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">year =</span> <span class="fu">year</span>(dob_date_format))</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>QUANT_vax_cards</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 270 × 42
-   date       group gender dob        tarjeta hep_b  bcg   polio_vip1 polio_vip2
-   &lt;date&gt;     &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;     
- 1 2024-05-21 A1.1  F      25-06-2018 Yes     25-06… 26-0… 27-08-2018 20-11-2018
- 2 2024-05-21 A1.2  M      29-05-2015 Yes     29-05… 29-0… &lt;NA&gt;       &lt;NA&gt;      
- 3 2024-05-21 A2.1  F      16-04-2016 Yes     16-04… 16-0… 08-07-2016 &lt;NA&gt;      
- 4 2024-05-21 A4    M      27-03-2021 Yes     28-03… 28-0… 31-05-2021 02-08-2021
- 5 2024-05-21 A5.1  F      21-10-2020 Yes     21-10… 22-1… 05-01-2021 08-30-2021
- 6 2024-05-21 A5.2  F      23-11-2021 Yes     23-11… 24-1… 26-01-2022 06-04-2022
- 7 2024-05-21 A5.3  M      28-08-2023 Yes     28-08… 29-0… 02-11-2023 11-01-2024
- 8 2024-05-21 A6    F      18-09-2022 Yes     19-09… 19-0… 23-11-2022 25-01-2023
- 9 2024-05-21 A7    M      05-03-2019 Yes     05-03… 06-0… 06-05-2019 08-07-2019
-10 2024-05-22 A8.1  F      16-01-2023 Yes     16-01… 17-0… 24-03-2023 24-05-2023
-# ℹ 260 more rows
-# ℹ 33 more variables: polio_vop1 &lt;chr&gt;, polio_vop2 &lt;chr&gt;, polio_vop3 &lt;chr&gt;,
-#   polio_refuerzo &lt;chr&gt;, penta1 &lt;chr&gt;, penta2 &lt;chr&gt;, penta3 &lt;chr&gt;,
-#   neumo1 &lt;chr&gt;, neumo2 &lt;chr&gt;, neumo3 &lt;chr&gt;, rota1 &lt;chr&gt;, rota2 &lt;chr&gt;,
-#   rota_adicional &lt;chr&gt;, srp1 &lt;chr&gt;, srp2 &lt;chr&gt;, srp_adicional &lt;chr&gt;,
-#   varicella &lt;chr&gt;, hep_a &lt;chr&gt;, dpt1 &lt;chr&gt;, dpt2 &lt;chr&gt;, hep_b1 &lt;chr&gt;,
-#   hep_b2 &lt;chr&gt;, vph_1 &lt;chr&gt;, tetanus_dip &lt;chr&gt;, influenza &lt;chr&gt;, …</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>vax_score_tibble <span class="ot">&lt;-</span> QUANT_vax_cards <span class="sc">|&gt;</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date_of_survey =</span> <span class="fu">as.Date</span>(date)) <span class="sc">|&gt;</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(group, date_of_survey, gender, dob, dob_date_format) </span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">#mutate(dob_day = day(dob_date_format),</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#       dob_month = month(dob_date_format),</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#       dob_year = year(dob_date_format))</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>vax_score_tibble <span class="ot">&lt;-</span> vax_score_tibble <span class="sc">|&gt;</span></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_in_days =</span> date_of_survey <span class="sc">-</span> dob_date_format) <span class="sc">|&gt;</span></span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_in_years =</span> <span class="fu">as.numeric</span>(age_in_days) <span class="sc">/</span> <span class="fl">365.25</span>) <span class="sc">|&gt;</span></span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_rounded =</span> <span class="fu">round</span>(age_in_years, <span class="dv">1</span>))</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>vax_score_tibble <span class="ot">&lt;-</span> vax_score_tibble <span class="sc">|&gt;</span></span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">desired_vax_score =</span> <span class="fu">if_else</span>(age_rounded <span class="sc">&lt;</span> <span class="fl">0.2</span>, <span class="dv">2</span>, </span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">0.2</span> <span class="sc">&amp;</span> age_rounded <span class="sc">&lt;</span> <span class="fl">0.3</span>, <span class="dv">6</span>,</span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>                               <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">0.3</span> <span class="sc">&amp;</span> age_rounded <span class="sc">&lt;</span> <span class="fl">0.5</span>, <span class="dv">10</span>,</span>
-<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>                                <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">0.5</span> <span class="sc">&amp;</span> age_rounded <span class="sc">&lt;</span> <span class="fl">1.0</span>, <span class="dv">13</span>, </span>
-<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>                                 <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">1.0</span> <span class="sc">&amp;</span> age_rounded <span class="sc">&lt;</span> <span class="fl">1.5</span>, <span class="dv">15</span>,</span>
-<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>                                  <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">1.5</span> <span class="sc">&amp;</span> age_rounded <span class="sc">&lt;</span> <span class="dv">4</span>, <span class="dv">18</span>,</span>
-<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>                                   <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="dv">4</span> <span class="sc">&amp;</span> age_rounded <span class="sc">&lt;</span> <span class="dv">11</span>, <span class="dv">19</span>,</span>
-<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="dv">11</span> <span class="sc">&amp;</span> gender <span class="sc">==</span> <span class="st">"M"</span>, <span class="dv">20</span>,</span>
-<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>                                     <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="dv">11</span> <span class="sc">&amp;</span> gender <span class="sc">==</span> <span class="st">"F"</span>, <span class="dv">21</span>, <span class="dv">0</span>))))))))))</span>
-<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>vax_score_tibble <span class="ot">&lt;-</span> vax_score_tibble <span class="sc">|&gt;</span></span>
-<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(group, dob_date_format, age_rounded, desired_vax_score) </span>
-<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>vax_score_tibble</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>vax_score_tibble <span class="ot">&lt;-</span> Consolidated_QUANT_Vax_Cards <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(group, date, gender, dob) </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>vax_score_tibble <span class="ot">&lt;-</span> vax_score_tibble <span class="sc">|&gt;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_in_days =</span> date <span class="sc">-</span> dob) <span class="sc">|&gt;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_in_years =</span> <span class="fu">as.numeric</span>(age_in_days) <span class="sc">/</span> <span class="fl">365.25</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_rounded =</span> <span class="fu">round</span>(age_in_years, <span class="dv">1</span>))</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>vax_score_tibble <span class="ot">&lt;-</span> vax_score_tibble <span class="sc">|&gt;</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">desired_vax_score =</span> <span class="fu">if_else</span>(age_rounded <span class="sc">&lt;</span> <span class="fl">0.2</span>, <span class="dv">2</span>, </span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">0.2</span> <span class="sc">&amp;</span> age_rounded <span class="sc">&lt;</span> <span class="fl">0.3</span>, <span class="dv">6</span>,</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>                               <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">0.3</span> <span class="sc">&amp;</span> age_rounded <span class="sc">&lt;</span> <span class="fl">0.5</span>, <span class="dv">10</span>,</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>                                <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">0.5</span> <span class="sc">&amp;</span> age_rounded <span class="sc">&lt;</span> <span class="fl">1.0</span>, <span class="dv">13</span>, </span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>                                 <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">1.0</span> <span class="sc">&amp;</span> age_rounded <span class="sc">&lt;</span> <span class="fl">1.5</span>, <span class="dv">15</span>,</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>                                  <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">1.5</span> <span class="sc">&amp;</span> age_rounded <span class="sc">&lt;</span> <span class="dv">4</span>, <span class="dv">18</span>,</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>                                   <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="dv">4</span> <span class="sc">&amp;</span> age_rounded <span class="sc">&lt;</span> <span class="dv">11</span>, <span class="dv">19</span>,</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="dv">11</span> <span class="sc">&amp;</span> gender <span class="sc">==</span> <span class="st">"M"</span>, <span class="dv">20</span>,</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>                                     <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="dv">11</span> <span class="sc">&amp;</span> gender <span class="sc">==</span> <span class="st">"F"</span>, <span class="dv">21</span>, <span class="dv">0</span>))))))))))</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>vax_score_tibble <span class="ot">&lt;-</span> vax_score_tibble <span class="sc">|&gt;</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(group, dob, age_rounded, desired_vax_score) </span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>vax_score_tibble</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 270 × 4
-   group dob_date_format age_rounded desired_vax_score
-   &lt;chr&gt; &lt;date&gt;                &lt;dbl&gt;             &lt;dbl&gt;
- 1 A1.1  2018-06-25              5.9                19
- 2 A1.2  2015-05-29              9                  19
- 3 A2.1  2016-04-16              8.1                19
- 4 A4    2021-03-27              3.2                18
- 5 A5.1  2020-10-21              3.6                18
- 6 A5.2  2021-11-23              2.5                18
- 7 A5.3  2023-08-28              0.7                13
- 8 A6    2022-09-18              1.7                18
- 9 A7    2019-03-05              5.2                19
-10 A8.1  2023-01-16              1.3                15
+   group dob        age_rounded desired_vax_score
+   &lt;chr&gt; &lt;date&gt;           &lt;dbl&gt;             &lt;dbl&gt;
+ 1 A1.1  2018-06-25         5.9                19
+ 2 A1.2  2015-05-29         9                  19
+ 3 A2.1  2016-04-16         8.1                19
+ 4 A4    2021-03-27         3.2                18
+ 5 A5.1  2020-10-21         3.6                18
+ 6 A5.2  2021-11-23         2.5                18
+ 7 A5.3  2023-08-28         0.7                13
+ 8 A6    2022-09-18         1.7                18
+ 9 A7    2019-03-05         5.2                19
+10 A8.1  2023-01-16         1.3                15
 # ℹ 260 more rows</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>Consolidated_QUANT_Vax_Cards <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Consolidated QUANT Vax Cards (no refuerzo, flu, vitA) - A+B Vax Cards MINUS Refuerzos, HepBs, Varicella.csv"</span>, </span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">col_types =</span> <span class="fu">cols</span>(<span class="at">date =</span> <span class="fu">col_date</span>(<span class="at">format =</span> <span class="st">"%d-%m-%y"</span>), </span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">dob =</span> <span class="fu">col_date</span>(<span class="at">format =</span> <span class="st">"%d-%m-%Y"</span>)))</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#View(Consolidated_QUANT_Vax_Cards)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>vaccine_schedule <span class="ot">&lt;-</span> Consolidated_QUANT_Vax_Cards</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>vaccine_final <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">survey_date =</span> vaccine_schedule<span class="sc">$</span>date,</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">group =</span> vaccine_schedule<span class="sc">$</span>group,</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">child_gender =</span> vaccine_schedule<span class="sc">$</span>gender,</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">child_dob =</span> vaccine_schedule<span class="sc">$</span>dob,</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">hep_b_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>hep_b), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">bcg_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>bcg), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">polio_vpi1_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>polio_vpi1), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">polio_vpi2_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>polio_vpi2), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">polio_vop1_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>polio_vop1), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">polio_vop2_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>polio_vop2), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">polio_vop3_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>polio_vop3), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">penta1_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>penta1), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">penta2_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>penta2), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">penta3_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>penta3), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">neumo1_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>neumo1), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">neumo2_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>neumo2), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">neumo3_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>neumo3), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
-<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">rota1_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>rota1), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">rota2_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>rota2), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
-<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">srp1_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>srp1), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
-<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">srp2_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>srp2), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
-<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">hep_a_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>hep_a), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
-<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">dpt1_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>dpt1), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
-<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">dpt2_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>dpt2), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
-<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">vph_1_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>vph_1), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
-<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">tetanus_dip_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>tetanus_dip), <span class="st">"YES"</span>, <span class="st">"NO"</span>))</span>
-<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>vaccine_final <span class="ot">&lt;-</span> vaccine_final <span class="sc">|&gt;</span></span>
-<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">|&gt;</span></span>
-<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">yes_count =</span> <span class="fu">sum</span>(<span class="fu">c_across</span>(hep_b_status<span class="sc">:</span>tetanus_dip_status) <span class="sc">==</span> <span class="st">"YES"</span>))</span>
-<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(vaccine_final)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>vaccine_schedule <span class="ot">&lt;-</span> Consolidated_QUANT_Vax_Cards</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>vaccine_final <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">survey_date =</span> vaccine_schedule<span class="sc">$</span>date,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">group =</span> vaccine_schedule<span class="sc">$</span>group,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">child_gender =</span> vaccine_schedule<span class="sc">$</span>gender,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">child_dob =</span> vaccine_schedule<span class="sc">$</span>dob,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">hep_b_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>hep_b), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">bcg_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>bcg), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">polio_vpi1_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>polio_vpi1), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">polio_vpi2_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>polio_vpi2), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">polio_vop1_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>polio_vop1), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">polio_vop2_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>polio_vop2), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">polio_vop3_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>polio_vop3), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">penta1_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>penta1), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">penta2_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>penta2), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">penta3_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>penta3), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">neumo1_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>neumo1), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">neumo2_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>neumo2), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">neumo3_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>neumo3), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">rota1_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>rota1), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">rota2_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>rota2), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">srp1_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>srp1), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">srp2_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>srp2), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">hep_a_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>hep_a), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">dpt1_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>dpt1), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">dpt2_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>dpt2), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">vph_1_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>vph_1), <span class="st">"YES"</span>, <span class="st">"NO"</span>),</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">tetanus_dip_status =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(vaccine_schedule<span class="sc">$</span>tetanus_dip), <span class="st">"YES"</span>, <span class="st">"NO"</span>))</span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>vaccine_final <span class="ot">&lt;-</span> vaccine_final <span class="sc">|&gt;</span></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">|&gt;</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">yes_count =</span> <span class="fu">sum</span>(<span class="fu">c_across</span>(hep_b_status<span class="sc">:</span>tetanus_dip_status) <span class="sc">==</span> <span class="st">"YES"</span>))</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(vaccine_final)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 270 × 27
 # Rowwise: 
@@ -293,40 +252,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 #   rota1_status &lt;chr&gt;, rota2_status &lt;chr&gt;, srp1_status &lt;chr&gt;,
 #   srp2_status &lt;chr&gt;, hep_a_status &lt;chr&gt;, dpt1_status &lt;chr&gt;, …</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>vaccine_final <span class="ot">&lt;-</span> vaccine_final <span class="sc">|&gt;</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">dob =</span> child_dob)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>actual_vax_score <span class="ot">&lt;-</span> vaccine_final <span class="sc">|&gt;</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(group, dob, yes_count)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>vaccine_final <span class="ot">&lt;-</span> vaccine_final <span class="sc">|&gt;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">dob =</span> child_dob)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>actual_vax_score <span class="ot">&lt;-</span> vaccine_final <span class="sc">|&gt;</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(group, dob, yes_count)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>joined_vax_cards <span class="ot">&lt;-</span> actual_vax_score <span class="sc">|&gt;</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(vax_score_tibble, <span class="at">by =</span> <span class="fu">join_by</span>(group))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>joined_vax_cards <span class="ot">&lt;-</span> actual_vax_score <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(vax_score_tibble, <span class="at">by =</span> <span class="fu">join_by</span>(group))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>joined_vax_cards <span class="ot">&lt;-</span> joined_vax_cards <span class="sc">|&gt;</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">complete =</span> <span class="fu">if_else</span>(yes_count <span class="sc">&gt;=</span> desired_vax_score, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>))</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>joined_vax_cards</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>joined_vax_cards <span class="ot">&lt;-</span> joined_vax_cards <span class="sc">|&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">complete =</span> <span class="fu">if_else</span>(yes_count <span class="sc">&gt;=</span> desired_vax_score, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>))</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>joined_vax_cards</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 270 × 7
-   group dob        yes_count dob_date_format age_rounded desired_vax_score
-   &lt;chr&gt; &lt;date&gt;         &lt;int&gt; &lt;date&gt;                &lt;dbl&gt;             &lt;dbl&gt;
- 1 A1.1  2018-06-25        18 2018-06-25              5.9                19
- 2 A1.2  2015-05-29        17 2015-05-29              9                  19
- 3 A2.1  2016-04-16        15 2016-04-16              8.1                19
- 4 A4    2021-03-27        16 2021-03-27              3.2                18
- 5 A5.1  2020-10-21        18 2020-10-21              3.6                18
- 6 A5.2  2021-11-23        16 2021-11-23              2.5                18
- 7 A5.3  2023-08-28        15 2023-08-28              0.7                13
- 8 A6    2022-09-18        18 2022-09-18              1.7                18
- 9 A7    2019-03-05        18 2019-03-05              5.2                19
-10 A8.1  2023-01-16        15 2023-01-16              1.3                15
-# ℹ 260 more rows
-# ℹ 1 more variable: complete &lt;lgl&gt;</code></pre>
+   group dob.x      yes_count dob.y      age_rounded desired_vax_score complete
+   &lt;chr&gt; &lt;date&gt;         &lt;int&gt; &lt;date&gt;           &lt;dbl&gt;             &lt;dbl&gt; &lt;lgl&gt;   
+ 1 A1.1  2018-06-25        18 2018-06-25         5.9                19 FALSE   
+ 2 A1.2  2015-05-29        17 2015-05-29         9                  19 FALSE   
+ 3 A2.1  2016-04-16        15 2016-04-16         8.1                19 FALSE   
+ 4 A4    2021-03-27        16 2021-03-27         3.2                18 FALSE   
+ 5 A5.1  2020-10-21        18 2020-10-21         3.6                18 TRUE    
+ 6 A5.2  2021-11-23        16 2021-11-23         2.5                18 FALSE   
+ 7 A5.3  2023-08-28        15 2023-08-28         0.7                13 TRUE    
+ 8 A6    2022-09-18        18 2022-09-18         1.7                18 TRUE    
+ 9 A7    2019-03-05        18 2019-03-05         5.2                19 FALSE   
+10 A8.1  2023-01-16        15 2023-01-16         1.3                15 TRUE    
+# ℹ 260 more rows</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>joined_vax_cards <span class="sc">|&gt;</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(complete)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>joined_vax_cards <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(complete)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 2
   complete     n
@@ -336,30 +294,221 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>vaccine_final <span class="sc">|&gt;</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(vax_score_tibble, <span class="at">by =</span> <span class="fu">join_by</span>(group))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>new_tibble <span class="ot">&lt;-</span> vaccine_final <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(vax_score_tibble, <span class="at">by =</span> <span class="fu">join_by</span>(group))</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>new_tibble <span class="ot">&lt;-</span> vax_score_tibble <span class="sc">|&gt;</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(vaccine_final, <span class="at">by =</span> <span class="fu">join_by</span>(group)) <span class="sc">|&gt;</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span><span class="fu">c</span>(group, dob.x, dob.y, survey_date))</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>new_tibble <span class="ot">&lt;-</span> new_tibble <span class="sc">|&gt;</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">hep_b_should =</span> <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">hep_b_match =</span> <span class="fu">if_else</span>(hep_b_status <span class="sc">==</span> hep_b_should, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">bcg_should =</span> <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">bcg_match =</span> <span class="fu">if_else</span>(bcg_status <span class="sc">==</span> bcg_should, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">polio_vpi1_should =</span> <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">0.2</span>, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">polio_vpi1_match =</span> <span class="fu">if_else</span>(polio_vpi1_status <span class="sc">==</span> polio_vpi1_should, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">polio_vpi2_should =</span> <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">0.3</span>, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">polio_vpi2_match =</span> <span class="fu">if_else</span>(polio_vpi2_status <span class="sc">==</span> polio_vpi2_should, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">polio_vop1_should =</span> <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">0.5</span>, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">polio_vop1_match =</span> <span class="fu">if_else</span>(polio_vop1_status <span class="sc">==</span> polio_vop1_should, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">polio_vop2_should =</span> <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">1.5</span>, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">polio_vop2_match =</span> <span class="fu">if_else</span>(polio_vop2_status <span class="sc">==</span> polio_vop2_should, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># skipping polio vop3 because not considering mandatory (it's extra, we are only including 4 polio shots as required)</span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">penta1_should =</span> <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">0.2</span>, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">penta1_match =</span> <span class="fu">if_else</span>(penta1_status <span class="sc">==</span> penta1_should, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">penta2_should =</span> <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">0.3</span>, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">penta2_match =</span> <span class="fu">if_else</span>(penta2_status <span class="sc">==</span> penta2_should, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">penta3_should =</span> <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">0.5</span>, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">penta3_match =</span> <span class="fu">if_else</span>(penta3_status <span class="sc">==</span> penta3_should, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">neumo1_should =</span> <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">0.2</span>, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">neumo1_match =</span> <span class="fu">if_else</span>(neumo1_status <span class="sc">==</span> neumo1_should, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">neumo2_should =</span> <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">0.3</span>, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">neumo2_match =</span> <span class="fu">if_else</span>(neumo2_status <span class="sc">==</span> neumo2_should, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">neumo3_should =</span> <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">0.5</span>, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">neumo3_match =</span> <span class="fu">if_else</span>(neumo3_status <span class="sc">==</span> neumo3_should, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rota1_should =</span> <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">0.2</span>, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rota1_match =</span> <span class="fu">if_else</span>(rota1_status <span class="sc">==</span> rota1_should, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rota2_should =</span> <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">0.3</span>, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rota2_match =</span> <span class="fu">if_else</span>(rota2_status <span class="sc">==</span> rota2_should, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">srp1_should =</span> <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">1.0</span>, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">srp1_match =</span> <span class="fu">if_else</span>(srp1_status <span class="sc">==</span> srp1_should, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">srp2_should =</span> <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">1.5</span>, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">srp2_match =</span> <span class="fu">if_else</span>(srp2_status <span class="sc">==</span> srp2_should, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">hep_a_should =</span> <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">1.0</span>, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">hep_a_match =</span> <span class="fu">if_else</span>(hep_a_status <span class="sc">==</span> hep_a_should, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-43"><a href="#cb19-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dpt1_should =</span> <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="fl">1.5</span>, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-44"><a href="#cb19-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dpt1_match =</span> <span class="fu">if_else</span>(dpt1_status <span class="sc">==</span> dpt1_should, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-45"><a href="#cb19-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dpt2_should =</span> <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="dv">4</span>, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-46"><a href="#cb19-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dpt2_match =</span> <span class="fu">if_else</span>(dpt2_status <span class="sc">==</span> dpt2_should, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-47"><a href="#cb19-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">vph_1_should =</span> <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="dv">11</span>  <span class="sc">&amp;</span> child_gender <span class="sc">==</span> <span class="st">"F"</span>, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-48"><a href="#cb19-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">vph_1_match =</span> <span class="fu">if_else</span>(vph_1_status <span class="sc">==</span> vph_1_should, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-49"><a href="#cb19-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tetanus_dip_should =</span> <span class="fu">if_else</span>(age_rounded <span class="sc">&gt;=</span> <span class="dv">11</span>, <span class="st">"YES"</span>, <span class="st">"NO"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-50"><a href="#cb19-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tetanus_dip_match =</span> <span class="fu">if_else</span>(tetanus_dip_status <span class="sc">==</span> tetanus_dip_should, <span class="st">"YES"</span>, <span class="st">"NO"</span>))</span>
+<span id="cb19-51"><a href="#cb19-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-52"><a href="#cb19-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-53"><a href="#cb19-53" aria-hidden="true" tabindex="-1"></a><span class="do">###### Hep B #########</span></span>
+<span id="cb19-54"><a href="#cb19-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-55"><a href="#cb19-55" aria-hidden="true" tabindex="-1"></a>match_tibble <span class="ot">&lt;-</span> new_tibble <span class="sc">|&gt;</span></span>
+<span id="cb19-56"><a href="#cb19-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(hep_b_match)</span>
+<span id="cb19-57"><a href="#cb19-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-58"><a href="#cb19-58" aria-hidden="true" tabindex="-1"></a>num_yes_match <span class="ot">&lt;-</span> match_tibble <span class="sc">|&gt;</span></span>
+<span id="cb19-59"><a href="#cb19-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(hep_b_match <span class="sc">==</span> <span class="st">"YES"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb19-60"><a href="#cb19-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(n)</span>
+<span id="cb19-61"><a href="#cb19-61" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(num_yes_match)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 270 × 30
-# Rowwise: 
-   survey_date group child_gender dob        hep_b_status bcg_status
-   &lt;date&gt;      &lt;chr&gt; &lt;chr&gt;        &lt;date&gt;     &lt;chr&gt;        &lt;chr&gt;     
- 1 2024-05-21  A1.1  F            2018-06-25 YES          YES       
- 2 2024-05-21  A1.2  M            2015-05-29 YES          YES       
- 3 2024-05-21  A2.1  F            2016-04-16 YES          YES       
- 4 2024-05-21  A4    M            2021-03-27 YES          YES       
- 5 2024-05-21  A5.1  F            2020-10-21 YES          YES       
- 6 2024-05-21  A5.2  F            2021-11-23 YES          YES       
- 7 2024-05-21  A5.3  M            2023-08-28 YES          YES       
- 8 2024-05-21  A6    F            2022-09-18 YES          YES       
- 9 2024-05-21  A7    M            2019-03-05 YES          YES       
-10 2024-05-22  A8.1  F            2023-01-16 YES          YES       
-# ℹ 260 more rows
-# ℹ 24 more variables: polio_vpi1_status &lt;chr&gt;, polio_vpi2_status &lt;chr&gt;,
-#   polio_vop1_status &lt;chr&gt;, polio_vop2_status &lt;chr&gt;, polio_vop3_status &lt;chr&gt;,
-#   penta1_status &lt;chr&gt;, penta2_status &lt;chr&gt;, penta3_status &lt;chr&gt;,
-#   neumo1_status &lt;chr&gt;, neumo2_status &lt;chr&gt;, neumo3_status &lt;chr&gt;,
-#   rota1_status &lt;chr&gt;, rota2_status &lt;chr&gt;, srp1_status &lt;chr&gt;,
-#   srp2_status &lt;chr&gt;, hep_a_status &lt;chr&gt;, dpt1_status &lt;chr&gt;, …</code></pre>
+<pre><code>[1] 255</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>should_tibble <span class="ot">&lt;-</span> new_tibble <span class="sc">|&gt;</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(hep_b_should)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>num_yes_should <span class="ot">&lt;-</span> should_tibble <span class="sc">|&gt;</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(hep_b_should <span class="sc">==</span> <span class="st">"YES"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(n)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(num_yes_should)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 270</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>hep_b_percent_adherence <span class="ot">=</span> num_yes_match <span class="sc">/</span> num_yes_should</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(hep_b_percent_adherence)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9444444</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="do">######  BCG  #########</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>match_tibble <span class="ot">&lt;-</span> new_tibble <span class="sc">|&gt;</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(bcg_match)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>num_yes_match <span class="ot">&lt;-</span> match_tibble <span class="sc">|&gt;</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(bcg_match <span class="sc">==</span> <span class="st">"YES"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(n)</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(num_yes_match)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 262</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>should_tibble <span class="ot">&lt;-</span> new_tibble <span class="sc">|&gt;</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(bcg_should)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>num_yes_should <span class="ot">&lt;-</span> should_tibble <span class="sc">|&gt;</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(bcg_should <span class="sc">==</span> <span class="st">"YES"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(n)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(num_yes_should)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 270</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>bcg_percent_adherence <span class="ot">=</span> num_yes_match <span class="sc">/</span> num_yes_should</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(bcg_percent_adherence)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9703704</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="do">###### Polio VPI 1 #########</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>match_tibble <span class="ot">&lt;-</span> new_tibble <span class="sc">|&gt;</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(polio_vpi1_match)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>num_yes_match <span class="ot">&lt;-</span> match_tibble <span class="sc">|&gt;</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(polio_vpi1_match <span class="sc">==</span> <span class="st">"YES"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(n)</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(num_yes_match)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 233</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>should_tibble <span class="ot">&lt;-</span> new_tibble <span class="sc">|&gt;</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(polio_vpi1_should)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>num_yes_should <span class="ot">&lt;-</span> should_tibble <span class="sc">|&gt;</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(polio_vpi1_should <span class="sc">==</span> <span class="st">"YES"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(n)</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(num_yes_should)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 269</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>polio_vpi1_percent_adherence <span class="ot">=</span> num_yes_match <span class="sc">/</span> num_yes_should</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(polio_vpi1_percent_adherence)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.866171</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="do">###### Polio VPI 2 #########</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>match_tibble <span class="ot">&lt;-</span> new_tibble <span class="sc">|&gt;</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(polio_vpi2_match)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>num_yes_match <span class="ot">&lt;-</span> match_tibble <span class="sc">|&gt;</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(polio_vpi2_match <span class="sc">==</span> <span class="st">"YES"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(n)</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(num_yes_match)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 197</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>should_tibble <span class="ot">&lt;-</span> new_tibble <span class="sc">|&gt;</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(polio_vpi2_should)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>num_yes_should <span class="ot">&lt;-</span> should_tibble <span class="sc">|&gt;</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(polio_vpi2_should <span class="sc">==</span> <span class="st">"YES"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(n)</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(num_yes_should)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 267</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>polio_vpi2_percent_adherence <span class="ot">=</span> num_yes_match <span class="sc">/</span> num_yes_should</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(polio_vpi2_percent_adherence)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7378277</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="do">###### Polio VOP 1 #########</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>match_tibble <span class="ot">&lt;-</span> new_tibble <span class="sc">|&gt;</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(polio_vop1_match)</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>num_yes_match <span class="ot">&lt;-</span> match_tibble <span class="sc">|&gt;</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(polio_vop1_match <span class="sc">==</span> <span class="st">"YES"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(n)</span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(num_yes_match)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 252</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>should_tibble <span class="ot">&lt;-</span> new_tibble <span class="sc">|&gt;</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(polio_vop1_should)</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>num_yes_should <span class="ot">&lt;-</span> should_tibble <span class="sc">|&gt;</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(polio_vop1_should <span class="sc">==</span> <span class="st">"YES"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(n)</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(num_yes_should)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 254</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>polio_vop1_percent_adherence <span class="ot">=</span> num_yes_match <span class="sc">/</span> num_yes_should</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(polio_vop1_percent_adherence)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.992126</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="do">###### Polio VOP 2 #########</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>match_tibble <span class="ot">&lt;-</span> new_tibble <span class="sc">|&gt;</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(polio_vop2_match)</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>num_yes_match <span class="ot">&lt;-</span> match_tibble <span class="sc">|&gt;</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(polio_vop2_match <span class="sc">==</span> <span class="st">"YES"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(n)</span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(num_yes_match)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 253</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>should_tibble <span class="ot">&lt;-</span> new_tibble <span class="sc">|&gt;</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(polio_vop2_should)</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>num_yes_should <span class="ot">&lt;-</span> should_tibble <span class="sc">|&gt;</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(polio_vop2_should <span class="sc">==</span> <span class="st">"YES"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(n)</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(num_yes_should)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 205</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>polio_vop2_percent_adherence <span class="ot">=</span> num_yes_match <span class="sc">/</span> num_yes_should</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(polio_vop2_percent_adherence)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.234146</code></pre>
 </div>
 </div>
 
