@@ -1612,3 +1612,37 @@ count_result_other <- QUAL_data |>
 
 #view(count_result_other)
 ```
+
+```{r}
+#| label: chi-square-tests-for-figure-3
+
+hosp_vax_p_value <- table(QUAL_data$island_region, QUAL_data$hospvaccination)
+result <- fisher.test(hosp_vax_p_value)
+p_value <- result$p.value
+
+print(p_value)
+
+clinic_vax_p_value <- table(QUAL_data$island_region, QUAL_data$clinicvaccination)
+result <- fisher.test(clinic_vax_p_value)
+p_value <- result$p.value
+
+print(p_value)
+
+other_vax_p_value <- table(QUAL_data$island_region, QUAL_data$othervaccination)
+result <- fisher.test(other_vax_p_value)
+p_value <- result$p.value
+
+print(p_value)
+
+brigade_vax_p_value <- table(QUAL_data$island_region, QUAL_data$brigadevaccination)
+result <- fisher.test(brigade_vax_p_value)
+p_value <- result$p.value
+
+print(p_value)
+
+centro_vax_p_value <- table(QUAL_data$island_region, QUAL_data$centrovaccination)
+result <- fisher.test(centro_vax_p_value)
+p_value <- result$p.value
+
+print(p_value)
+```

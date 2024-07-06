@@ -2126,6 +2126,48 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb404-6"><a href="#cb404-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb404-7"><a href="#cb404-7" aria-hidden="true" tabindex="-1"></a><span class="co">#view(count_result_other)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb405"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb405-1"><a href="#cb405-1" aria-hidden="true" tabindex="-1"></a>hosp_vax_p_value <span class="ot">&lt;-</span> <span class="fu">table</span>(QUAL_data<span class="sc">$</span>island_region, QUAL_data<span class="sc">$</span>hospvaccination)</span>
+<span id="cb405-2"><a href="#cb405-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">fisher.test</span>(hosp_vax_p_value)</span>
+<span id="cb405-3"><a href="#cb405-3" aria-hidden="true" tabindex="-1"></a>p_value <span class="ot">&lt;-</span> result<span class="sc">$</span>p.value</span>
+<span id="cb405-4"><a href="#cb405-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb405-5"><a href="#cb405-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p_value)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.689235e-06</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb407"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb407-1"><a href="#cb407-1" aria-hidden="true" tabindex="-1"></a>clinic_vax_p_value <span class="ot">&lt;-</span> <span class="fu">table</span>(QUAL_data<span class="sc">$</span>island_region, QUAL_data<span class="sc">$</span>clinicvaccination)</span>
+<span id="cb407-2"><a href="#cb407-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">fisher.test</span>(clinic_vax_p_value)</span>
+<span id="cb407-3"><a href="#cb407-3" aria-hidden="true" tabindex="-1"></a>p_value <span class="ot">&lt;-</span> result<span class="sc">$</span>p.value</span>
+<span id="cb407-4"><a href="#cb407-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb407-5"><a href="#cb407-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p_value)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1504057</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb409"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb409-1"><a href="#cb409-1" aria-hidden="true" tabindex="-1"></a>other_vax_p_value <span class="ot">&lt;-</span> <span class="fu">table</span>(QUAL_data<span class="sc">$</span>island_region, QUAL_data<span class="sc">$</span>othervaccination)</span>
+<span id="cb409-2"><a href="#cb409-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">fisher.test</span>(other_vax_p_value)</span>
+<span id="cb409-3"><a href="#cb409-3" aria-hidden="true" tabindex="-1"></a>p_value <span class="ot">&lt;-</span> result<span class="sc">$</span>p.value</span>
+<span id="cb409-4"><a href="#cb409-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb409-5"><a href="#cb409-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p_value)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2874604</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb411"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb411-1"><a href="#cb411-1" aria-hidden="true" tabindex="-1"></a>brigade_vax_p_value <span class="ot">&lt;-</span> <span class="fu">table</span>(QUAL_data<span class="sc">$</span>island_region, QUAL_data<span class="sc">$</span>brigadevaccination)</span>
+<span id="cb411-2"><a href="#cb411-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">fisher.test</span>(brigade_vax_p_value)</span>
+<span id="cb411-3"><a href="#cb411-3" aria-hidden="true" tabindex="-1"></a>p_value <span class="ot">&lt;-</span> result<span class="sc">$</span>p.value</span>
+<span id="cb411-4"><a href="#cb411-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb411-5"><a href="#cb411-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p_value)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.008859936</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb413"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb413-1"><a href="#cb413-1" aria-hidden="true" tabindex="-1"></a>centro_vax_p_value <span class="ot">&lt;-</span> <span class="fu">table</span>(QUAL_data<span class="sc">$</span>island_region, QUAL_data<span class="sc">$</span>centrovaccination)</span>
+<span id="cb413-2"><a href="#cb413-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">fisher.test</span>(centro_vax_p_value)</span>
+<span id="cb413-3"><a href="#cb413-3" aria-hidden="true" tabindex="-1"></a>p_value <span class="ot">&lt;-</span> result<span class="sc">$</span>p.value</span>
+<span id="cb413-4"><a href="#cb413-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb413-5"><a href="#cb413-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p_value)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.50153e-09</code></pre>
+</div>
+</div>
 
 </main>
 <!-- /main column -->
