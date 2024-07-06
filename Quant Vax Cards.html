@@ -2060,6 +2060,72 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>[1] 0.5</code></pre>
 </div>
 </div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb398"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb398-1"><a href="#cb398-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming age needs conversion</span></span>
+<span id="cb398-2"><a href="#cb398-2" aria-hidden="true" tabindex="-1"></a>vax_score_tibble <span class="ot">&lt;-</span> vax_score_tibble <span class="sc">|&gt;</span></span>
+<span id="cb398-3"><a href="#cb398-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age =</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(age_rounded)))</span>
+<span id="cb398-4"><a href="#cb398-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb398-5"><a href="#cb398-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate mean of age, ignoring NA values</span></span>
+<span id="cb398-6"><a href="#cb398-6" aria-hidden="true" tabindex="-1"></a>mean_age <span class="ot">&lt;-</span> vax_score_tibble <span class="sc">|&gt;</span></span>
+<span id="cb398-7"><a href="#cb398-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_age =</span> <span class="fu">mean</span>(age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb398-8"><a href="#cb398-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb398-9"><a href="#cb398-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mean_age)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  mean_age
+     &lt;dbl&gt;
+1     4.40</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb400"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb400-1"><a href="#cb400-1" aria-hidden="true" tabindex="-1"></a>QUAL_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"RStudio_GitHub Merged Data (QUAL) - Qual.csv"</span>, </span>
+<span id="cb400-2"><a href="#cb400-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">col_types =</span> <span class="fu">cols</span>(<span class="at">date =</span> <span class="fu">col_date</span>(<span class="at">format =</span> <span class="st">"%d-%m-%y"</span>)))</span>
+<span id="cb400-3"><a href="#cb400-3" aria-hidden="true" tabindex="-1"></a><span class="co">#View(QUAL_data)</span></span>
+<span id="cb400-4"><a href="#cb400-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb400-5"><a href="#cb400-5" aria-hidden="true" tabindex="-1"></a>QUAL_data <span class="ot">&lt;-</span> QUAL_data <span class="sc">|&gt;</span></span>
+<span id="cb400-6"><a href="#cb400-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(<span class="at">hospvaccination =</span> <span class="fu">if_else</span>(<span class="fu">grepl</span>(<span class="st">"Hosp"</span>, vax_location), <span class="st">"Contains Hosp"</span>, <span class="st">"Does not contain Hosp"</span>)) </span>
+<span id="cb400-7"><a href="#cb400-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb400-8"><a href="#cb400-8" aria-hidden="true" tabindex="-1"></a>count_result_hosp <span class="ot">&lt;-</span> QUAL_data <span class="sc">|&gt;</span></span>
+<span id="cb400-9"><a href="#cb400-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(hospvaccination)</span>
+<span id="cb400-10"><a href="#cb400-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb400-11"><a href="#cb400-11" aria-hidden="true" tabindex="-1"></a><span class="co">#view(count_result_hosp)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb401"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb401-1"><a href="#cb401-1" aria-hidden="true" tabindex="-1"></a>QUAL_data <span class="ot">&lt;-</span> QUAL_data <span class="sc">|&gt;</span></span>
+<span id="cb401-2"><a href="#cb401-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(<span class="at">clinicvaccination =</span> <span class="fu">if_else</span>(<span class="fu">grepl</span>(<span class="st">"CE"</span>, vax_location), <span class="st">"Contains CE"</span>, <span class="st">"Does not contain CE"</span>)) </span>
+<span id="cb401-3"><a href="#cb401-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb401-4"><a href="#cb401-4" aria-hidden="true" tabindex="-1"></a>count_result_CE <span class="ot">&lt;-</span> QUAL_data <span class="sc">|&gt;</span></span>
+<span id="cb401-5"><a href="#cb401-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(clinicvaccination)</span>
+<span id="cb401-6"><a href="#cb401-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb401-7"><a href="#cb401-7" aria-hidden="true" tabindex="-1"></a><span class="co">#view(count_result_CE)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb402"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb402-1"><a href="#cb402-1" aria-hidden="true" tabindex="-1"></a>QUAL_data <span class="ot">&lt;-</span> QUAL_data <span class="sc">|&gt;</span></span>
+<span id="cb402-2"><a href="#cb402-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(<span class="at">centrovaccination =</span> <span class="fu">if_else</span>(<span class="fu">grepl</span>(<span class="st">"Centro"</span>, vax_location), <span class="st">"Contains Centro"</span>, <span class="st">"Does not contain Centro"</span>)) </span>
+<span id="cb402-3"><a href="#cb402-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb402-4"><a href="#cb402-4" aria-hidden="true" tabindex="-1"></a>count_result_centro <span class="ot">&lt;-</span> QUAL_data <span class="sc">|&gt;</span></span>
+<span id="cb402-5"><a href="#cb402-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(centrovaccination)</span>
+<span id="cb402-6"><a href="#cb402-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb402-7"><a href="#cb402-7" aria-hidden="true" tabindex="-1"></a><span class="co">#view(count_result_centro)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb403"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb403-1"><a href="#cb403-1" aria-hidden="true" tabindex="-1"></a>QUAL_data <span class="ot">&lt;-</span> QUAL_data <span class="sc">|&gt;</span></span>
+<span id="cb403-2"><a href="#cb403-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(<span class="at">brigadevaccination =</span> <span class="fu">if_else</span>(<span class="fu">grepl</span>(<span class="st">"Brigade"</span>, vax_location), <span class="st">"Contains Brigade"</span>, <span class="st">"Does not contain Brigade"</span>)) </span>
+<span id="cb403-3"><a href="#cb403-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb403-4"><a href="#cb403-4" aria-hidden="true" tabindex="-1"></a>count_result_brigade <span class="ot">&lt;-</span> QUAL_data <span class="sc">|&gt;</span></span>
+<span id="cb403-5"><a href="#cb403-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(brigadevaccination)</span>
+<span id="cb403-6"><a href="#cb403-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb403-7"><a href="#cb403-7" aria-hidden="true" tabindex="-1"></a><span class="co">#view(count_result_brigade)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb404"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb404-1"><a href="#cb404-1" aria-hidden="true" tabindex="-1"></a>QUAL_data <span class="ot">&lt;-</span> QUAL_data <span class="sc">|&gt;</span></span>
+<span id="cb404-2"><a href="#cb404-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(<span class="at">othervaccination =</span> <span class="fu">if_else</span>(<span class="fu">grepl</span>(<span class="st">"Other"</span>, vax_location), <span class="st">"Contains Other"</span>, <span class="st">"Does not contain Other"</span>)) </span>
+<span id="cb404-3"><a href="#cb404-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb404-4"><a href="#cb404-4" aria-hidden="true" tabindex="-1"></a>count_result_other <span class="ot">&lt;-</span> QUAL_data <span class="sc">|&gt;</span></span>
+<span id="cb404-5"><a href="#cb404-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(othervaccination)</span>
+<span id="cb404-6"><a href="#cb404-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb404-7"><a href="#cb404-7" aria-hidden="true" tabindex="-1"></a><span class="co">#view(count_result_other)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
 </main>
 <!-- /main column -->

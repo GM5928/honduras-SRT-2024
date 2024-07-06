@@ -1535,5 +1535,80 @@ print(tetanus_dip_percent_adherence)
 ```
 
 ```{r}
-#| label: mean-age-of-kids
+#| label: mean-age-of-vax-card-kids
+
+# Assuming age needs conversion
+vax_score_tibble <- vax_score_tibble |>
+  mutate(age = as.numeric(as.character(age_rounded)))
+
+# Calculate mean of age, ignoring NA values
+mean_age <- vax_score_tibble |>
+  summarise(mean_age = mean(age, na.rm = TRUE))
+
+print(mean_age)
+```
+
+```{r}
+#| label: figure-3-results-hosp
+
+QUAL_data <- read_csv("RStudio_GitHub Merged Data (QUAL) - Qual.csv", 
+    col_types = cols(date = col_date(format = "%d-%m-%y")))
+#View(QUAL_data)
+
+QUAL_data <- QUAL_data |>
+mutate(hospvaccination = if_else(grepl("Hosp", vax_location), "Contains Hosp", "Does not contain Hosp")) 
+
+count_result_hosp <- QUAL_data |>
+  count(hospvaccination)
+
+#view(count_result_hosp)
+
+```
+
+```{r}
+#| label: figure-3-results-CE
+
+QUAL_data <- QUAL_data |>
+mutate(clinicvaccination = if_else(grepl("CE", vax_location), "Contains CE", "Does not contain CE")) 
+
+count_result_CE <- QUAL_data |>
+  count(clinicvaccination)
+
+#view(count_result_CE)
+```
+
+```{r}
+#| label: figure-3-results-centro
+
+QUAL_data <- QUAL_data |>
+mutate(centrovaccination = if_else(grepl("Centro", vax_location), "Contains Centro", "Does not contain Centro")) 
+
+count_result_centro <- QUAL_data |>
+  count(centrovaccination)
+
+#view(count_result_centro)
+```
+
+```{r}
+#| label: figure-3-results-brigade
+
+QUAL_data <- QUAL_data |>
+mutate(brigadevaccination = if_else(grepl("Brigade", vax_location), "Contains Brigade", "Does not contain Brigade")) 
+
+count_result_brigade <- QUAL_data |>
+  count(brigadevaccination)
+
+#view(count_result_brigade)
+```
+
+```{r}
+#| label: figure-3-results-other
+
+QUAL_data <- QUAL_data |>
+mutate(othervaccination = if_else(grepl("Other", vax_location), "Contains Other", "Does not contain Other")) 
+
+count_result_other <- QUAL_data |>
+  count(othervaccination)
+
+#view(count_result_other)
 ```
