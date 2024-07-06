@@ -1533,3 +1533,7 @@ print(num_yes_should)
 tetanus_dip_percent_adherence = num_yes_match / num_yes_should
 print(tetanus_dip_percent_adherence)
 ```
+
+```{r}
+#| label: mean-age-of-kids
+```
