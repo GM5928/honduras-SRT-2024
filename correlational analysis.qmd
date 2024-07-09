@@ -1,0 +1,375 @@
+---
+title: "correlational analysis"
+format: html
+---
+
+```{r}
+#| label: p-value-la-colonia-vaccine-uptake
+
+library(readr)
+QUAL_data <- read_csv("RStudio_GitHub Merged Data (QUAL) - Qual.csv")
+#View(QUAL_data)
+
+#Question 1
+table_preg_uno_colonia <- table(QUAL_data$preg_uno, QUAL_data$colonia)
+print(table_preg_uno_colonia)
+
+fisher_result <- fisher.test(table_preg_uno_colonia)
+print(fisher_result)
+
+#Question 2
+
+table_preg_dos_colonia <- table(QUAL_data$preg_dos, QUAL_data$colonia)
+print(table_preg_dos_colonia)
+
+fisher_result <- fisher.test(table_preg_dos_colonia)
+print(fisher_result)
+
+#Question 3
+
+table_preg_tres_colonia <- table(QUAL_data$preg_tres, QUAL_data$colonia)
+print(table_preg_tres_colonia)
+
+fisher_result <- fisher.test(table_preg_tres_colonia)
+print(fisher_result)
+
+#Question 4
+
+table_preg_cuatro_colonia <- table(QUAL_data$preg_cuatro, QUAL_data$colonia)
+print(table_preg_cuatro_colonia)
+
+fisher_result <- fisher.test(table_preg_cuatro_colonia)
+print(fisher_result)
+
+#Question 5
+
+table_preg_cinco_colonia <- table(QUAL_data$preg_cinco, QUAL_data$colonia)
+print(table_preg_cinco_colonia)
+
+fisher_result <- fisher.test(table_preg_cinco_colonia)
+print(fisher_result)
+
+#Question 6
+
+table_preg_seis_colonia <- table(QUAL_data$preg_seis, QUAL_data$colonia)
+print(table_preg_seis_colonia)
+
+fisher_result <- fisher.test(table_preg_seis_colonia)
+print(fisher_result)
+```
+
+```{r}
+# Example data
+# A = Number of vaccinated children in Colonia
+# B = Number of non-vaccinated children in Colonia
+# C = Number of vaccinated children in Not Colonia
+# D = Number of non-vaccinated children in Not Colonia
+
+A <- 151  # Replace with your actual data
+B <- 161   # Replace with your actual data
+C <- 104  # Replace with your actual data
+D <- 109   # Replace with your actual data
+
+# Create the contingency table
+contingency_table <- matrix(c(A, B, C, D), nrow = 2, byrow = TRUE)
+
+# Add row and column names for clarity
+rownames(contingency_table) <- c("Colonia", "Not Colonia")
+colnames(contingency_table) <- c("Vaccinated", "Not Vaccinated")
+
+# Print the table
+print(contingency_table)
+
+# Run the Chi-square test
+chi_square_test <- chisq.test(contingency_table)
+
+# Print the results
+print(chi_square_test)
+
+```
+
+```{r}
+#| label: chi-square-test-colonia-vs-not
+# A = Number of vaccinated children in Colonia
+# E = Total number of eligible children in Colonia
+# B = Number of vaccinated children in Not Colonia
+# F = Total number of eligible children in Not Colonia
+
+A <- 151
+E <- 161 
+B <- 104  
+F <- 109 
+
+
+not_vaccinated_colonia <- E - A
+not_vaccinated_not_colonia <- F - B
+
+contingency_table <- matrix(c(A, not_vaccinated_colonia, B, not_vaccinated_not_colonia), nrow = 2, byrow = TRUE)
+
+rownames(contingency_table) <- c("Colonia", "Not Colonia")
+colnames(contingency_table) <- c("Vaccinated", "Not Vaccinated")
+
+print(contingency_table)
+
+chi_square_test <- chisq.test(contingency_table, correct = FALSE)
+
+print(chi_square_test)
+
+#Tetanus Chi-Square Test
+
+A <- 3
+E <- 7
+B <- 1  
+F <- 2 
+
+
+not_vaccinated_colonia <- E - A
+not_vaccinated_not_colonia <- F - B
+
+contingency_table <- matrix(c(A, not_vaccinated_colonia, B, not_vaccinated_not_colonia), nrow = 2, byrow = TRUE)
+
+rownames(contingency_table) <- c("Colonia", "Not Colonia")
+colnames(contingency_table) <- c("Vaccinated", "Not Vaccinated")
+
+print(contingency_table)
+
+chi_square_test <- chisq.test(contingency_table, correct = FALSE)
+
+print(chi_square_test)
+
+#HPV Vaccine
+
+A <- 1
+E <- 5
+B <- 0  
+F <- 1 
+
+
+not_vaccinated_colonia <- E - A
+not_vaccinated_not_colonia <- F - B
+
+contingency_table <- matrix(c(A, not_vaccinated_colonia, B, not_vaccinated_not_colonia), nrow = 2, byrow = TRUE)
+
+rownames(contingency_table) <- c("Colonia", "Not Colonia")
+colnames(contingency_table) <- c("Vaccinated", "Not Vaccinated")
+
+print(contingency_table)
+
+chi_square_test <- chisq.test(contingency_table, correct = FALSE)
+
+print(chi_square_test)
+
+#DPT 2
+
+A <- 71
+E <- 88
+B <- 32  
+F <- 41 
+
+
+not_vaccinated_colonia <- E - A
+not_vaccinated_not_colonia <- F - B
+
+contingency_table <- matrix(c(A, not_vaccinated_colonia, B, not_vaccinated_not_colonia), nrow = 2, byrow = TRUE)
+
+rownames(contingency_table) <- c("Colonia", "Not Colonia")
+colnames(contingency_table) <- c("Vaccinated", "Not Vaccinated")
+
+print(contingency_table)
+
+chi_square_test <- chisq.test(contingency_table, correct = FALSE)
+
+print(chi_square_test)
+
+#DPT 1
+
+A <- 114
+E <- 129
+B <- 69  
+F <- 76 
+
+
+not_vaccinated_colonia <- E - A
+not_vaccinated_not_colonia <- F - B
+
+contingency_table <- matrix(c(A, not_vaccinated_colonia, B, not_vaccinated_not_colonia), nrow = 2, byrow = TRUE)
+
+rownames(contingency_table) <- c("Colonia", "Not Colonia")
+colnames(contingency_table) <- c("Vaccinated", "Not Vaccinated")
+
+print(contingency_table)
+
+chi_square_test <- chisq.test(contingency_table, correct = FALSE)
+
+print(chi_square_test)
+
+#Hepatitis A
+
+A <- 70
+E <- 142
+B <- 49  
+F <- 88 
+
+
+not_vaccinated_colonia <- E - A
+not_vaccinated_not_colonia <- F - B
+
+contingency_table <- matrix(c(A, not_vaccinated_colonia, B, not_vaccinated_not_colonia), nrow = 2, byrow = TRUE)
+
+rownames(contingency_table) <- c("Colonia", "Not Colonia")
+colnames(contingency_table) <- c("Vaccinated", "Not Vaccinated")
+
+print(contingency_table)
+
+chi_square_test <- chisq.test(contingency_table, correct = FALSE)
+
+print(chi_square_test)
+
+#MMR 2
+A <- 109
+E <- 129
+B <- 62  
+F <- 76 
+
+
+not_vaccinated_colonia <- E - A
+not_vaccinated_not_colonia <- F - B
+
+contingency_table <- matrix(c(A, not_vaccinated_colonia, B, not_vaccinated_not_colonia), nrow = 2, byrow = TRUE)
+
+rownames(contingency_table) <- c("Colonia", "Not Colonia")
+colnames(contingency_table) <- c("Vaccinated", "Not Vaccinated")
+
+print(contingency_table)
+
+chi_square_test <- chisq.test(contingency_table, correct = FALSE)
+
+print(chi_square_test)
+
+#MMR 1
+
+A <- 139
+E <- 142
+B <- 81  
+F <- 88 
+
+
+not_vaccinated_colonia <- E - A
+not_vaccinated_not_colonia <- F - B
+
+contingency_table <- matrix(c(A, not_vaccinated_colonia, B, not_vaccinated_not_colonia), nrow = 2, byrow = TRUE)
+
+rownames(contingency_table) <- c("Colonia", "Not Colonia")
+colnames(contingency_table) <- c("Vaccinated", "Not Vaccinated")
+
+print(contingency_table)
+
+chi_square_test <- chisq.test(contingency_table, correct = FALSE)
+
+print(chi_square_test)
+
+#Rotavirus 2
+A <- 155
+E <- 160
+B <- 98  
+F <- 107 
+
+
+not_vaccinated_colonia <- E - A
+not_vaccinated_not_colonia <- F - B
+
+contingency_table <- matrix(c(A, not_vaccinated_colonia, B, not_vaccinated_not_colonia), nrow = 2, byrow = TRUE)
+
+rownames(contingency_table) <- c("Colonia", "Not Colonia")
+colnames(contingency_table) <- c("Vaccinated", "Not Vaccinated")
+
+print(contingency_table)
+
+chi_square_test <- chisq.test(contingency_table, correct = FALSE)
+
+print(chi_square_test)
+
+#Rotavirus 1
+A <- 158
+E <- 161
+B <- 106  
+F <- 108 
+
+
+not_vaccinated_colonia <- E - A
+not_vaccinated_not_colonia <- F - B
+
+contingency_table <- matrix(c(A, not_vaccinated_colonia, B, not_vaccinated_not_colonia), nrow = 2, byrow = TRUE)
+
+rownames(contingency_table) <- c("Colonia", "Not Colonia")
+colnames(contingency_table) <- c("Vaccinated", "Not Vaccinated")
+
+print(contingency_table)
+
+chi_square_test <- chisq.test(contingency_table, correct = FALSE)
+
+print(chi_square_test)
+
+#Pneumococcal 3
+A <- 147
+E <- 156
+B <- 90  
+F <- 98 
+
+
+not_vaccinated_colonia <- E - A
+not_vaccinated_not_colonia <- F - B
+
+contingency_table <- matrix(c(A, not_vaccinated_colonia, B, not_vaccinated_not_colonia), nrow = 2, byrow = TRUE)
+
+rownames(contingency_table) <- c("Colonia", "Not Colonia")
+colnames(contingency_table) <- c("Vaccinated", "Not Vaccinated")
+
+print(contingency_table)
+
+chi_square_test <- chisq.test(contingency_table, correct = FALSE)
+
+print(chi_square_test)
+
+#Pneumococcal 2
+A <- 156
+E <- 161
+B <- 98  
+F <- 107 
+
+
+not_vaccinated_colonia <- E - A
+not_vaccinated_not_colonia <- F - B
+
+contingency_table <- matrix(c(A, not_vaccinated_colonia, B, not_vaccinated_not_colonia), nrow = 2, byrow = TRUE)
+
+rownames(contingency_table) <- c("Colonia", "Not Colonia")
+colnames(contingency_table) <- c("Vaccinated", "Not Vaccinated")
+
+print(contingency_table)
+
+chi_square_test <- chisq.test(contingency_table, correct = FALSE)
+
+print(chi_square_test)
+
+#Pneumococcal 1
+A <- 153
+E <- 160
+B <- 106  
+F <- 108 
+
+
+not_vaccinated_colonia <- E - A
+not_vaccinated_not_colonia <- F - B
+
+contingency_table <- matrix(c(A, not_vaccinated_colonia, B, not_vaccinated_not_colonia), nrow = 2, byrow = TRUE)
+
+rownames(contingency_table) <- c("Colonia", "Not Colonia")
+colnames(contingency_table) <- c("Vaccinated", "Not Vaccinated")
+
+print(contingency_table)
+
+chi_square_test <- chisq.test(contingency_table, correct = FALSE)
+
+print(chi_square_test)
+```
