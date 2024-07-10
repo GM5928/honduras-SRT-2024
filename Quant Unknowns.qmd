@@ -60,11 +60,11 @@ bar_plot <- vax_counts |>
   geom_bar(stat = "identity") +
   geom_text(aes(label = n), vjust = -0.5) +
   labs(
-    title = "Self-Reported Vaccination Status of Children",
-    x = "Vaccination Status",
-    y = "Number of Children Accounted For"
+    title = "Estado de Vacunación Autoinformado de Niños",
+    x = "Estado de Vacunación",
+    y = "Número de Niños Representados"
   ) +
-  scale_fill_discrete(name = "Reported Number of Vaccines") +
+  scale_fill_discrete(name = "Número Reportado de Vacunas") +
   theme_minimal()
 
 print(bar_plot)
