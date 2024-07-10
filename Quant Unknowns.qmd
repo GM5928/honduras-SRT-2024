@@ -26,6 +26,7 @@ RStudio_GitHub_Merged_Data_QUANT_A_B_Unknowns |> ggplot(
   aes(x = gender, fill = gender)
 ) +
   geom_bar() +
+  geom_text(stat='count', aes(label=..count..), vjust=-0.5) +
   labs(title = "Number of Children Accounted For",
        subtitle = "Based on Respondents to Survey",
        x = "Gender",
@@ -46,6 +47,27 @@ pie(slices,labels = lbls, col=rainbow(length(lbls)),
 #| label: count_vaccine_self_report
 RStudio_GitHub_Merged_Data_QUANT_A_B_Unknowns |>
   count(how_many_vax)
+library(ggplot2)
+library(dplyr)
+
+# Summarize the data
+vax_counts <- RStudio_GitHub_Merged_Data_QUANT_A_B_Unknowns |>
+  count(how_many_vax)
+
+# Create the bar graph
+bar_plot <- vax_counts |>
+  ggplot(aes(x = how_many_vax, y = n, fill = how_many_vax)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = n), vjust = -0.5) +
+  labs(
+    title = "Self-Reported Vaccination Status of Children",
+    x = "Vaccination Status",
+    y = "Number of Children Accounted For"
+  ) +
+  scale_fill_discrete(name = "Reported Number of Vaccines") +
+  theme_minimal()
+
+print(bar_plot)
 ```
 
 ```{r}
